@@ -8,7 +8,7 @@ const briyaniData = [
     description:
       "Seeraga samba rice cooked with tender Mutton pieces in a firewood",
     price: 350,
-    photoName: "briyani/dindugal.jpg",
+    photoName: "briyani/dindugal.jfif",
     soldOut: false,
   },
   {
@@ -16,7 +16,7 @@ const briyaniData = [
     description:
       "Seeraga samba rice cooked with tender Chicken pieces in a firewood",
     price: 300,
-    photoName: "briyani/dindugalchicken.jpg",
+    photoName: "briyani/dindugalchicken.jfif",
     soldOut: false,
   },
   {
@@ -38,7 +38,7 @@ const briyaniData = [
     description:
       "This combo includes authentic seeraga samba Mutton briyani,Raita,Chicken gravy and Gulab Jamun",
     price: 500,
-    photoName: "briyani/muttoncombo.jpg",
+    photoName: "briyani/muttoncombo.jfif",
     soldOut: true,
   },
   {
@@ -46,8 +46,8 @@ const briyaniData = [
     description:
       "This combo includes authentic seeraga samba Chicken briyani,Raita,Chicken gravy and Gulab Jamun",
     price: 400,
-    photoName: "briyani/combochicken.jpg",
-    soldOut: true,
+    photoName: "briyani/combochicken.jfif",
+    soldOut: false,
   },
 ];
 
@@ -56,35 +56,83 @@ function App() {
     <div className="container">
       <Header />
       <Menu />
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
 
 function Header() {
   return (
-    <div className="header">
+    <header className="header">
       <h1>Briyani Hut</h1>
-    </div>
+    </header>
   );
 }
 
 function Menu() {
+  const briyanis = briyaniData;
+  const briyaniNum = briyanis.length;
+
   return (
     <div className="menu">
       <h2>Our Menu</h2>
-      <Briyani />
+      <>
+        <p>
+          Authentic Briyani Restaurant.Hand Picked dishes to choose from. Cooked
+          with love to feed your Tastebuds.
+        </p>
+        {briyaniNum > 0 ? (
+          <ul className="briyanis">
+            {briyanis.map((briyani) => (
+              <Briyani briyaniObj={briyani} key={briyani.name} />
+            ))}
+          </ul>
+        ) : (
+          <p>We're still working on our menu. Please come back later 😞</p>
+        )}
+      </>
     </div>
   );
 }
 
-function Briyani() {
+function Briyani({ briyaniObj }) {
   return (
-    <div className="briyani">
-      <img src="./briyani/dindugal.jfif" alt="briyani" />
-      <h3>Dindugal</h3>
-      <p>Seeraga samba rice cooked with tender Mutton pieces in a firewood</p>
-      <span>350</span>
+    <div className={`briyani ${briyaniObj.soldOut ? "sold-out" : ""}`}>
+      <img src={briyaniObj.photoName} alt="briyani" />
+      <div>
+        <h3>{briyaniObj.name}</h3>
+        <p>{briyaniObj.description}</p>
+        <span>{briyaniObj.soldOut ? "SOLD OUT" : briyaniObj.price}</span>
+      </div>
+    </div>
+  );
+}
+
+function Footer() {
+  const hour = new Date().getHours();
+  const openHour = 12;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+
+  return (
+    <footer className="footer">
+      {isOpen ? (
+        <OpeningHour closeHour={closeHour} />
+      ) : (
+        <p>
+          Sorry! We're closed now. We will be available between {openHour}
+          :00 and {closeHour}:00
+        </p>
+      )}
+    </footer>
+  );
+}
+
+function OpeningHour({ closeHour }) {
+  return (
+    <div className="order">
+      <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+      <button className="btn">Order</button>
     </div>
   );
 }
